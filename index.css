@@ -18,6 +18,10 @@ body .left_clm {
   width: 30%;
 }
 
+body .left_clm .hide {
+  display: none;
+}
+
 body .left_clm form {
   background-color: #fff;
   display: -webkit-box;

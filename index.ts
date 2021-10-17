@@ -6,10 +6,14 @@ const autoFuelInput = document.getElementById("fuel") as HTMLSelectElement;
 const addButton = document.getElementById("save") as HTMLInputElement;
 const carList = document.getElementById('list') as HTMLInputElement;
 
+const addCarForm = document.getElementById('add_car') as HTMLElement;
+const updateCarForm = document.getElementById('update_car') as HTMLElement;
+
 const modelUpdateInput = document.getElementById("updateModel") as HTMLInputElement;
 const dateUpdateInput = document.getElementById("updateDate") as HTMLInputElement;
-const colorUpdateInput = document.getElementById("updatecolor") as HTMLInputElement;
+const colorUpdateInput = document.getElementById("updateColor") as HTMLInputElement;
 const fuelUpdateInput = document.getElementById("updateFuel") as HTMLInputElement;
+
 let updateCar: Car; //Atnaujinamo automobilio Objektas
 
 enum KuroTipas {
@@ -40,7 +44,7 @@ class Car {
                 <div class="entry_parameter">${KuroTipas[this.fuel]}</div>
                 <div class="actions">
                     <img class="edit" onclick='onUpdateCar(${this.id})' src='./img/edit.png' alt="Atnaujinti">
-                    <img class="delete" src="./img/delete.png" alt="Istrinti">
+                    <img class="delete" onclick='onDeleteCar(${this.id})' src="./img/delete.png" alt="Istrinti">
                 </div>
             </div>`;
     }
@@ -58,6 +62,13 @@ addButton?.addEventListener('click', (e) => {
     autoParkas.push(car);
 
     publishCars();
+
+    autoModelInput.value = '';
+    autoDateInput.value = '';
+    autoColorInput.value = '';
+    autoFuelInput.value = '';
+
+
 });
 
 function publishCars() {
@@ -77,13 +88,41 @@ function onUpdateCar(id: number): void {
     console.log(updateCar);
     populateUpdateForm();
 
+    addCarForm.classList.add("hide");
+    updateCarForm.classList.remove("hide");
 }
-
 
 function populateUpdateForm() {
     modelUpdateInput.value = updateCar.model;
-    dateUpdateInput.value = updateCar.date;
+    dateUpdateInput.value = updateCar.date.toISOString().slice(0, 10);
     colorUpdateInput.value = updateCar.color;
-    fuelUpdateInput.value = updateCar.fuel;
+    fuelUpdateInput.value = updateCar.fuel.toString();
+
+
 }
 
+function onSave() {
+    updateCar.model = modelUpdateInput.value;
+    updateCar.date = new Date(dateUpdateInput.value);
+    updateCar.color = colorUpdateInput.value;
+    updateCar.fuel = +fuelUpdateInput.value;
+
+    addCarForm.classList.remove("hide");
+    updateCarForm.classList.add("hide");
+
+    publishCars();
+}
+
+function onDeleteCar(id: number) {
+    let deleteCar: Car | undefined; //= autoParkas[0];
+    for (const car of autoParkas) {
+        if (id === car.id) {
+            deleteCar = car;
+        }
+    }
+    if (deleteCar) {
+        autoParkas.splice(autoParkas.indexOf(deleteCar), 1);
+    }
+
+    publishCars();
+}
