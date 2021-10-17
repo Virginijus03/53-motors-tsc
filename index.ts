@@ -53,6 +53,14 @@ class Car {
 const autoParkas: Car[] = [];
 
 addButton?.addEventListener('click', (e) => {
+    if (autoModelInput.value === '' ||
+        autoDateInput.value === '' ||
+        autoColorInput.value === '' ||
+        autoFuelInput.value === '') {
+        alert("ERROR, tuscti laukai negali buti!")
+        return
+    };
+
     const car = new Car(autoModelInput.value,
         autoDateInput.value,
         autoColorInput.value,
@@ -71,11 +79,14 @@ addButton?.addEventListener('click', (e) => {
 
 });
 
-function publishCars() {
+function publishCars(filter?: KuroTipas) {
     carList.innerHTML = '';
     for (const car of autoParkas) {
-        car.printCar(carList);
-        console.log(car.model);
+        if (filter === undefined || filter === car.fuel) {
+            car.printCar(carList);
+            console.log(car.model);
+        }
+
     }
 }
 
@@ -125,4 +136,16 @@ function onDeleteCar(id: number) {
     }
 
     publishCars();
+}
+
+function allCarsList() {
+    publishCars();
+}
+
+function dyzelCarsList() {
+    publishCars(KuroTipas.Dyzelis);
+}
+
+function gasCarsList() {
+    publishCars(KuroTipas.Benzinas);
 }
