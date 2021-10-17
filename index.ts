@@ -4,6 +4,13 @@ const autoColorInput = document.getElementById("color") as HTMLInputElement;
 const autoFuelInput = document.getElementById("fuel") as HTMLSelectElement;
 //const autoFuelListInput = document.getElementById("fuelList");
 const addButton = document.getElementById("save") as HTMLInputElement;
+const carList = document.getElementById('list') as HTMLInputElement;
+
+const modelUpdateInput = document.getElementById("updateModel") as HTMLInputElement;
+const dateUpdateInput = document.getElementById("updateDate") as HTMLInputElement;
+const colorUpdateInput = document.getElementById("updatecolor") as HTMLInputElement;
+const fuelUpdateInput = document.getElementById("updateFuel") as HTMLInputElement;
+let updateCar: Car; //Atnaujinamo automobilio Objektas
 
 enum KuroTipas {
     Dyzelis,
@@ -11,29 +18,72 @@ enum KuroTipas {
 }
 
 class Car {
-    public readonly model: string;
-    public readonly date: Date;
-    public readonly color: string;
-    public readonly fuel: KuroTipas;
+    public model: string;
+    public date: Date;
+    public color: string;
+    public fuel: KuroTipas;
+    public id: number;
 
     constructor(model: string, date: string, color: string, fuel: string) {
         this.model = model;
         this.color = color;
         this.date = new Date(date);
         this.fuel = +fuel;
+        this.id = Math.round(Math.random() * 1000);
+    }
+    public printCar(element: HTMLElement) {
+        // element.innerHTML += `${this.model}`
+        element.innerHTML += `<div class="entry">
+                <div class="entry_parameter">${this.model}</div>
+                <div class="entry_parameter">${this.date.toISOString().slice(0, 10)}</div>
+                <div class="entry_parameter">${this.color}</div>
+                <div class="entry_parameter">${KuroTipas[this.fuel]}</div>
+                <div class="actions">
+                    <img class="edit" onclick='onUpdateCar(${this.id})' src='./img/edit.png' alt="Atnaujinti">
+                    <img class="delete" src="./img/delete.png" alt="Istrinti">
+                </div>
+            </div>`;
     }
 }
 
 const autoParkas: Car[] = [];
 
-addButton?.addEventListener('click', () => {
+addButton?.addEventListener('click', (e) => {
     const car = new Car(autoModelInput.value,
         autoDateInput.value,
         autoColorInput.value,
         autoFuelInput.value);
     console.log('Mygtukas paspaustas!');
+
+    autoParkas.push(car);
+
+    publishCars();
 });
 
+function publishCars() {
+    carList.innerHTML = '';
+    for (const car of autoParkas) {
+        car.printCar(carList);
+        console.log(car.model);
+    }
+}
+
+function onUpdateCar(id: number): void {
+    for (const car of autoParkas) {
+        if (id === car.id) {
+            updateCar = car;
+        }
+    }
+    console.log(updateCar);
+    populateUpdateForm();
+
+}
 
 
+function populateUpdateForm() {
+    modelUpdateInput.value = updateCar.model;
+    dateUpdateInput.value = updateCar.date;
+    colorUpdateInput.value = updateCar.color;
+    fuelUpdateInput.value = updateCar.fuel;
+}
 

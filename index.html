@@ -29,20 +29,19 @@
             </form>
         </div>
 
-        <!-- <div class="form hide" id="update_car">
+        <div class="form hide" id="update_car">
             <form>
-                <input id="model" type="text" placeholder="Modelis">
-                <input id="date" type="date" placeholder="Pagaminimo data">
-                <input id="color" type="text" placeholder="Spalva">
-                <input id="fuel" list="fuel" name="fuelTypes" placeholder="Kuro tipas">
-                <datalist id="fuel">
-                    <option value="${Dyzelinas}">
-                    <option value="${Benzinas}">
-                </datalist>
+                <input id="updateModel" type="text" placeholder="Modelis">
+                <input id="updateDate" type="date" placeholder="Pagaminimo data">
+                <input id="updateColor" type="text" placeholder="Spalva">
+                <select id="updateFuel">
+                    <option value="0">Dyzelinas</option>
+                    <option value="1">Benzinas</option>
+                </select>
 
-                <button class="save" type="button">Atnaujinti</button>
+                <button id="updateSave" type="button">Atnaujinti</button>
             </form>
-        </div> -->
+        </div>
 
     </div>
 
@@ -64,6 +63,7 @@
         </div>
 
         <div id="list">
+
         </div>
 
     </div>
